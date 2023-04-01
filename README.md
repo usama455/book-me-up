@@ -1,2 +1,2 @@
 # book-me-up
-A next based app to help readers 
+A react based app to help readers 
