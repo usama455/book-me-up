@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/book-me-up/static/css/main.fee69684.css",
-    "main.js": "/book-me-up/static/js/main.1520c11b.js",
+    "main.js": "/book-me-up/static/js/main.df3139d6.js",
     "static/media/hp.png": "/book-me-up/static/media/hp.feece36a03fe27edff0e.png",
     "static/media/hobbit.png": "/book-me-up/static/media/hobbit.bac820b58d4e1b9ab618.png",
     "static/media/alchem.png": "/book-me-up/static/media/alchem.5895eb994b68189d141b.png",
@@ -14,10 +14,10 @@
     "static/media/pnp.png": "/book-me-up/static/media/pnp.eb16667e49f22416fda2.png",
     "index.html": "/book-me-up/index.html",
     "main.fee69684.css.map": "/book-me-up/static/css/main.fee69684.css.map",
-    "main.1520c11b.js.map": "/book-me-up/static/js/main.1520c11b.js.map"
+    "main.df3139d6.js.map": "/book-me-up/static/js/main.df3139d6.js.map"
   },
   "entrypoints": [
     "static/css/main.fee69684.css",
-    "static/js/main.1520c11b.js"
+    "static/js/main.df3139d6.js"
   ]
 }
