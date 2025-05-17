@@ -1,15 +1,23 @@
 {
   "files": {
-    "main.css": "/book-me-up/static/css/main.1cbf3bb3.css",
-    "main.js": "/book-me-up/static/js/main.ffaa2f95.js",
+    "main.css": "/book-me-up/static/css/main.fee69684.css",
+    "main.js": "/book-me-up/static/js/main.1520c11b.js",
+    "static/media/hp.png": "/book-me-up/static/media/hp.feece36a03fe27edff0e.png",
+    "static/media/hobbit.png": "/book-me-up/static/media/hobbit.bac820b58d4e1b9ab618.png",
+    "static/media/alchem.png": "/book-me-up/static/media/alchem.5895eb994b68189d141b.png",
+    "static/media/tokillamocking.png": "/book-me-up/static/media/tokillamocking.39792fe6c47005d68923.png",
     "static/media/theGreatGatsby.png": "/book-me-up/static/media/theGreatGatsby.41fe3f8f755d110a95e7.png",
+    "static/media/tfis.png": "/book-me-up/static/media/tfis.dac7fbfa96042e2fc64a.png",
+    "static/media/bnw.png": "/book-me-up/static/media/bnw.9543c4c53b85ac54041b.png",
+    "static/media/tcir.png": "/book-me-up/static/media/tcir.687bbcac67bf1d512c7f.png",
     "static/media/1984.png": "/book-me-up/static/media/1984.16522bcfff9b39be0d4d.png",
+    "static/media/pnp.png": "/book-me-up/static/media/pnp.eb16667e49f22416fda2.png",
     "index.html": "/book-me-up/index.html",
-    "main.1cbf3bb3.css.map": "/book-me-up/static/css/main.1cbf3bb3.css.map",
-    "main.ffaa2f95.js.map": "/book-me-up/static/js/main.ffaa2f95.js.map"
+    "main.fee69684.css.map": "/book-me-up/static/css/main.fee69684.css.map",
+    "main.1520c11b.js.map": "/book-me-up/static/js/main.1520c11b.js.map"
   },
   "entrypoints": [
-    "static/css/main.1cbf3bb3.css",
-    "static/js/main.ffaa2f95.js"
+    "static/css/main.fee69684.css",
+    "static/js/main.1520c11b.js"
   ]
 }
