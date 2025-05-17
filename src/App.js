@@ -12,7 +12,7 @@ function App() {
   return (
     <ThemeProvider>
       <BookProvider>
-        <Router>
+        <Router basename="/book-me-up">
           <div className="app">
             <Header />
             <main className="content">
