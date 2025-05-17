@@ -23,7 +23,7 @@ function App() {
               </Routes>
             </main>
             <footer className="footer">
-              <p>© 2025 Book Recommender App</p>
+              <p>© 2025 Book Me Up By Muhammad Usama</p>
             </footer>
           </div>
         </Router>

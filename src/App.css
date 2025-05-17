@@ -137,6 +137,11 @@ body {
   outline-offset: 2px;
 }
 
+
+.home-page{
+     margin-bottom: 60px;
+    text-align: center;
+}
 /* Book grid */
 .book-grid {
   display: grid;
@@ -322,10 +327,13 @@ body {
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 0 20px;
+  padding: 10px 20px; /* Add vertical padding for better alignment */
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
+  display: flex;           /* Enable flexbox */
+  align-items: center;     /* Vertically center content */
+  gap: 8px;                /* Adds space between icon and text */
 }
 
 .search-btn:hover,
@@ -442,5 +450,11 @@ body {
   .nav {
     gap: 10px;
   }
+  
 }
-
+.footer {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center;     /* Vertically center if height is set */
+  height: 60px;            /* Optional: give it some height */
+}

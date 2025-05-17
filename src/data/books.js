@@ -1,5 +1,16 @@
 import Gatsby from '../assets/theGreatGatsby.png'
 import Orwell from '../assets/1984.png'
+import ToKillAMocking from '../assets/tokillamocking.png'
+
+import HP from '../assets/hp.png'
+import Hobbit from '../assets/hobbit.png'
+import TheCatcherInTheRye from '../assets/tcir.png'
+import BraveNewWorld from '../assets/bnw.png'
+import PrideAndPrejudice from '../assets/pnp.png'
+import TheFaultInOurStars from '../assets/tfis.png'
+import Alchemist from '../assets/alchem.png'
+
+
 export const booksData = [
   {
     id: '1',
@@ -25,7 +36,7 @@ export const booksData = [
     author: 'Harper Lee',
     genre: 'Classic',
     rating: 4.8,
-    coverImage: 'https://coverImages.openlibrary.org/b/id/8228691-L.jpg',
+    coverImage: ToKillAMocking,
     description: 'A story of racial injustice and childhood innocence set in the American South.'
   },
   {
@@ -34,7 +45,7 @@ export const booksData = [
     author: 'J.K. Rowling',
     genre: 'Fantasy',
     rating: 4.7,
-    coverImage: 'https://coverImages.openlibrary.org/b/id/7984916-L.jpg',
+    coverImage: HP,
     description: 'A young boy discoverImages he is a wizard and attends a magical school called Hogwarts.'
   },
   {
@@ -43,7 +54,7 @@ export const booksData = [
     author: 'J.R.R. Tolkien',
     genre: 'Fantasy',
     rating: 4.5,
-    coverImage: 'https://coverImages.openlibrary.org/b/id/6979861-L.jpg',
+    coverImage: Hobbit,
     description: 'Bilbo Baggins joins a quest to reclaim a treasure from a dragon in this fantasy classic.'
   },
   {
@@ -52,7 +63,7 @@ export const booksData = [
     author: 'J.D. Salinger',
     genre: 'Classic',
     rating: 3.9,
-    coverImage: 'https://coverImages.openlibrary.org/b/id/8231856-L.jpg',
+    coverImage: TheCatcherInTheRye,
     description: 'Holden Caulfield recounts a few days in his life as he wanders New York City.'
   },
   {
@@ -61,7 +72,7 @@ export const booksData = [
     author: 'Aldous Huxley',
     genre: 'Dystopian',
     rating: 4.2,
-    coverImage: 'https://coverImages.openlibrary.org/b/id/8228692-L.jpg',
+    coverImage: BraveNewWorld,
     description: 'A futuristic society driven by technological advancements and loss of individuality.'
   },
   {
@@ -70,7 +81,7 @@ export const booksData = [
     author: 'Jane Austen',
     genre: 'Romance',
     rating: 4.6,
-    coverImage: 'https://coverImages.openlibrary.org/b/id/8082546-L.jpg',
+    coverImage: PrideAndPrejudice,
     description: 'Elizabeth Bennet navigates issues of class, marriage, and morality in 19th-century England.'
   },
   {
@@ -79,7 +90,7 @@ export const booksData = [
     author: 'Paulo Coelho',
     genre: 'Adventure',
     rating: 4.1,
-    coverImage: 'https://coverImages.openlibrary.org/b/id/8235115-L.jpg',
+    coverImage: Alchemist,
     description: 'A shepherd named Santiago dreams of finding treasure in Egypt and embarks on a journey of self-discoverImagey.'
   },
   {
@@ -88,7 +99,7 @@ export const booksData = [
     author: 'John Green',
     genre: 'Young Adult',
     rating: 4.4,
-    coverImage: 'https://coverImages.openlibrary.org/b/id/7949256-L.jpg',
+    coverImage: TheFaultInOurStars,
     description: 'A love story between two teenagers who meet at a cancer support group.'
   }
 ];
