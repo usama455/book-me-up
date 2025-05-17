@@ -1,10 +1,34 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './pages/Home';
+import BookDetails from './pages/BookDetails';
+import Favorites from './pages/Favorites';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { BookProvider } from './contexts/BookContext';
+import './App.css';
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-         Hello World
-      </header>
-    </div>
+    <ThemeProvider>
+      <BookProvider>
+        <Router>
+          <div className="app">
+            <Header />
+            <main className="content">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/book/:id" element={<BookDetails />} />
+                <Route path="/favorites" element={<Favorites />} />
+              </Routes>
+            </main>
+            <footer className="footer">
+              <p>© 2025 Book Recommender App</p>
+            </footer>
+          </div>
+        </Router>
+      </BookProvider>
+    </ThemeProvider>
   );
 }
 
