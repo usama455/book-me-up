@@ -1,143 +1,137 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { booksData } from '../data/books';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 
 const BookContext = createContext();
-
 export const useBooks = () => useContext(BookContext);
 
 export const BookProvider = ({ children }) => {
   const [books, setBooks] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // Load books data
-  useEffect(() => {
-    // Simulate API loading
-    const loadBooks = async () => {
-      setLoading(true);
-      try {
-        // In a real app, this would be an API call
-        // For demo purposes, we're using the imported data
-        setTimeout(() => {
-          setBooks(booksData);
-          setLoading(false);
-        }, 800);
-      } catch (error) {
-        console.error('Error loading books:', error);
-        setLoading(false);
-      }
-    };
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('fiction');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalFound, setTotalFound] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
+
+  // Memoized fetch function to avoid recreating on every render
+  const fetchBooks = useCallback(async (query, page) => {
+    setIsSearching(true);
+    setError(null);
     
-    loadBooks();
+    try {
+      const res = await fetch(
+        `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&page=${page}&limit=20`
+      );
+      
+      if (!res.ok) {
+        throw new Error(`API error: ${res.status}`);
+      }
+      
+      const data = await res.json();
+      
+      const formattedBooks = data.docs.map(book => ({
+        id: book.key?.replace('/works/', '') || book.edition_key?.[0] || Math.random().toString(36).substring(2, 9),
+        title: book.title || 'Untitled',
+        author: book.author_name?.[0] || 'Unknown Author',
+        genre: book.subject?.[0] || 'Uncategorized',
+        publicationYear: book.first_publish_year,
+        rating: parseFloat((Math.random() * (5 - 3.5) + 3.5).toFixed(1)),
+        coverImage: book.cover_i 
+          ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg` 
+          : null,
+        description: book.first_sentence?.[0] || 'No description available.'
+      }));
+      
+      setBooks(formattedBooks);
+      setTotalFound(data.numFound || 0);
+    } catch (err) {
+      console.error('Error fetching books:', err);
+      setError('Failed to load books. Please try again later.');
+      setBooks([]);
+      setTotalFound(0);
+    } finally {
+      setLoading(false);
+      setIsSearching(false);
+    }
   }, []);
-  
-  // Load favorites from localStorage
+
+  // Debounced search to prevent excessive API calls
   useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchBooks(searchQuery, currentPage);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, [searchQuery, currentPage, fetchBooks]);
+
+  // Load favorites from localStorage on initial render
+  useEffect(() => {
+    setLoading(true);
     const storedFavorites = localStorage.getItem('bookFavorites');
+    
     if (storedFavorites) {
       try {
         setFavorites(JSON.parse(storedFavorites));
       } catch (error) {
         console.error('Error parsing favorites:', error);
+        localStorage.removeItem('bookFavorites');
       }
     }
   }, []);
-  
-  // Save favorites to localStorage when updated
+
+  // Save favorites to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('bookFavorites', JSON.stringify(favorites));
   }, [favorites]);
-  
-  // Toggle favorite status
+
   const toggleFavorite = (bookId) => {
-    setFavorites(prevFavorites => {
-      if (prevFavorites.includes(bookId)) {
-        return prevFavorites.filter(id => id !== bookId);
-      } else {
-        return [...prevFavorites, bookId];
-      }
-    });
+    setFavorites((prev) =>
+      prev.includes(bookId)
+        ? prev.filter((id) => id !== bookId)
+        : [...prev, bookId]
+    );
+  };
+
+  const isFavorite = (bookId) => favorites.includes(bookId);
+  
+  const getBookById = (id) => books.find((book) => book.id === id);
+  
+  const getFavoriteBooks = () => books.filter((book) => favorites.includes(book.id));
+
+  const nextPage = () => {
+    window.scrollTo(0, 0);
+    setCurrentPage((prev) => prev + 1);
   };
   
-  // Check if book is favorite
-  const isFavorite = (bookId) => {
-    return favorites.includes(bookId);
+  const prevPage = () => {
+    window.scrollTo(0, 0);
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
   
-  // Get book by ID
-  const getBookById = (id) => {
-    return books.find(book => book.id === id);
+  const setSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page on new search
   };
-  
-  // Get favorite books
-  const getFavoriteBooks = () => {
-    return books.filter(book => favorites.includes(book.id));
-  };
-  
-  // Search books
-  const searchBooks = (query, filters = {}) => {
-    if (!query && Object.keys(filters).length === 0) {
-      return books;
-    }
-    
-    let filteredBooks = [...books];
-    
-    // Apply search query
-    if (query) {
-      const lowerQuery = query.toLowerCase();
-      filteredBooks = filteredBooks.filter(book => 
-        book.title.toLowerCase().includes(lowerQuery) ||
-        book.author.toLowerCase().includes(lowerQuery)
-      );
-    }
-    
-    // Apply genre filter
-    if (filters.genre && filters.genre !== 'all') {
-      filteredBooks = filteredBooks.filter(book => 
-        book.genre === filters.genre
-      );
-    }
-    
-    // Apply rating filter
-    if (filters.rating && filters.rating !== 'all') {
-      filteredBooks = filteredBooks.filter(book => 
-        book.rating >= parseInt(filters.rating)
-      );
-    }
-    
-    return filteredBooks;
-  };
-  
-  // Get similar books
-  const getSimilarBooks = (bookId, limit = 4) => {
-    const book = getBookById(bookId);
-    if (!book) return [];
-    
-    return books
-      .filter(b => b.id !== bookId && b.genre === book.genre)
-      .sort(() => 0.5 - Math.random())
-      .slice(0, limit);
-  };
-  
-  // Get all available genres
-  const getGenres = () => {
-    const genres = new Set(books.map(book => book.genre));
-    return ['all', ...Array.from(genres)];
-  };
-  
+
   return (
-    <BookContext.Provider value={{
-      books,
-      loading,
-      favorites,
-      toggleFavorite,
-      isFavorite,
-      getBookById,
-      getFavoriteBooks,
-      searchBooks,
-      getSimilarBooks,
-      getGenres
-    }}>
+    <BookContext.Provider
+      value={{
+        books,
+        loading,
+        error,
+        favorites,
+        totalFound,
+        currentPage,
+        isSearching,
+        toggleFavorite,
+        isFavorite,
+        getBookById,
+        getFavoriteBooks,
+        nextPage,
+        prevPage,
+        setSearchQuery: setSearch
+      }}
+    >
       {children}
     </BookContext.Provider>
   );
