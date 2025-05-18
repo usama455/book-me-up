@@ -25,8 +25,8 @@ const Home = () => {
     totalFound,
     nextPage,
     prevPage,
-    setSearchQuery,
-    isSearching
+    isSearching,
+    fetchBooks,
   } = useBooks();
 
   const [search, setSearch] = useState('');
@@ -48,21 +48,38 @@ const Home = () => {
     e.preventDefault();
     const genreText = selectedGenre !== 'All' ? selectedGenre : '';
     const fullQuery = [debouncedSearch, genreText].filter(Boolean).join(' ');
-    setSearchQuery(fullQuery || 'fiction');
+    fetchBooks(fullQuery, 1);
   };
 
-  // Apply local filtering based on selected genre
-  useEffect(() => {
-    if (selectedGenre === 'All') {
-      setFilteredBooks(books);
-    } else {
-      setFilteredBooks(
-        books.filter(
-          (book) => book.genre?.toLowerCase().includes(selectedGenre.toLowerCase())
-        )
-      );
+  const handleGenreChange = (e) => {
+    const newGenre = e.target.value;
+    setSelectedGenre(newGenre);
+    
+    // Trigger search on genre change
+    const genreText = newGenre !== 'All' ? newGenre : '';
+    const searchText = debouncedSearch || '';
+    const fullQuery = [searchText, genreText].filter(Boolean).join(' ');
+    
+    // If the query is empty and genre is All, don't search
+    if (fullQuery || genreText) {
+      fetchBooks(fullQuery || 'fiction', 1);
     }
-  }, [books, selectedGenre]);
+  };
+
+  // Apply local filtering based on selected genre only if not in loading state
+  useEffect(() => {
+    if (!loading && !isSearching) {
+      if (selectedGenre === 'All') {
+        setFilteredBooks(books);
+      } else {
+        setFilteredBooks(
+          books.filter(
+            (book) => book.genre?.toLowerCase().includes(selectedGenre.toLowerCase())
+          )
+        );
+      }
+    }
+  }, [books, selectedGenre, loading, isSearching]);
 
   return (
     <div className="home-page">
@@ -86,15 +103,7 @@ const Home = () => {
         <select
           className="genre-select"
           value={selectedGenre}
-          onChange={(e) => {
-            setSelectedGenre(e.target.value);
-            // Trigger search on genre change if there's already a search term
-            if (debouncedSearch) {
-              const genreText = e.target.value !== 'All' ? e.target.value : '';
-              const fullQuery = [debouncedSearch, genreText].filter(Boolean).join(' ');
-              setSearchQuery(fullQuery || 'fiction');
-            }
-          }}
+          onChange={handleGenreChange}
         >
           {GENRES.map((genre) => (
             <option key={genre} value={genre}>
@@ -114,7 +123,7 @@ const Home = () => {
         </div>
       )}
 
-      {loading ? (
+      {loading || isSearching ? (
         <div className="loading-container">
           <LoadingSpinner />
           <p>Finding amazing books for you...</p>

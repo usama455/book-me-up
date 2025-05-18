@@ -16,6 +16,7 @@ export const BookProvider = ({ children }) => {
   // Memoized fetch function to avoid recreating on every render
   const fetchBooks = useCallback(async (query, page) => {
     setIsSearching(true);
+    setLoading(true);
     setError(null);
     
     try {
@@ -44,6 +45,8 @@ export const BookProvider = ({ children }) => {
       
       setBooks(formattedBooks);
       setTotalFound(data.numFound || 0);
+      setSearchQuery(query);
+      setCurrentPage(page);
     } catch (err) {
       console.error('Error fetching books:', err);
       setError('Failed to load books. Please try again later.');
@@ -55,18 +58,14 @@ export const BookProvider = ({ children }) => {
     }
   }, []);
 
-  // Debounced search to prevent excessive API calls
+  // Initial load of books
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchBooks(searchQuery, currentPage);
-    }, 500);
-    
-    return () => clearTimeout(timer);
-  }, [searchQuery, currentPage, fetchBooks]);
+    fetchBooks(searchQuery, currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Load favorites from localStorage on initial render
   useEffect(() => {
-    setLoading(true);
     const storedFavorites = localStorage.getItem('bookFavorites');
     
     if (storedFavorites) {
@@ -100,17 +99,20 @@ export const BookProvider = ({ children }) => {
 
   const nextPage = () => {
     window.scrollTo(0, 0);
-    setCurrentPage((prev) => prev + 1);
+    const nextPageNum = currentPage + 1;
+    setCurrentPage(nextPageNum);
+    fetchBooks(searchQuery, nextPageNum);
   };
   
   const prevPage = () => {
     window.scrollTo(0, 0);
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
+    const prevPageNum = Math.max(currentPage - 1, 1);
+    setCurrentPage(prevPageNum);
+    fetchBooks(searchQuery, prevPageNum);
   };
   
   const setSearch = (query) => {
-    setSearchQuery(query);
-    setCurrentPage(1); // Reset to first page on new search
+    fetchBooks(query, 1);
   };
 
   return (
@@ -123,6 +125,7 @@ export const BookProvider = ({ children }) => {
         totalFound,
         currentPage,
         isSearching,
+        fetchBooks,
         toggleFavorite,
         isFavorite,
         getBookById,
